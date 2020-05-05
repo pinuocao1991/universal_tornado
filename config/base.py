@@ -1,14 +1,8 @@
 # conding:utf-8
 
-
 import tornado.web
 from tornado.log import access_log
 
-redis_options = {
-    'redis_host':'127.0.0.1',
-    'redis_port':6379,
-    'redis_pass':'',
-}
 
 # 请求日志
 def log_func(handler):
@@ -83,10 +77,9 @@ def route(url_pattern):
     """
     路由装饰器, 只能装饰 RequestHandler 子类
     """
-
     def handler_wapper(cls):
         assert (issubclass(cls, RequestHandler))
         cls.url_pattern = url_pattern
         return cls
-
     return handler_wapper
+

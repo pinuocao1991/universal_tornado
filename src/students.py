@@ -1,5 +1,5 @@
 from config.base import route
-from config.middleware import MiddleHandler
+from config.middleHandler import MiddleHandler
 
 
 @route('/students')
