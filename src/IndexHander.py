@@ -1,11 +1,13 @@
-from config.base import route, RequestHandler
+from config.base import route
+from config.middleware import MiddleHandler
+
 
 @route('/')
-class Main(RequestHandler):
+class Main(MiddleHandler):
     def get(self):
         self.write("Hello World")
 
 @route('/person')
-class Person(RequestHandler):
+class Person(MiddleHandler):
     def get(self, name):
         self.write(name)

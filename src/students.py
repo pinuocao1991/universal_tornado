@@ -1,7 +1,9 @@
-from config.base import route, RequestHandler
+from config.base import route
+from config.middleware import MiddleHandler
+
 
 @route('/students')
-class students(RequestHandler):
+class students(MiddleHandler):
     def get(self):
         self.write("students class")
 
