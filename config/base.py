@@ -1,4 +1,5 @@
 # conding:utf-8
+from typing import List
 
 import tornado.web
 from tornado.log import access_log
@@ -51,7 +52,11 @@ class Application(tornado.web.Application):
         for i in dir(handler_module):
             cls = getattr(handler_module, i)
             if is_handler(cls) and has_pattern(cls):
-                handlers.append((cls.url_pattern, cls))
+                if isinstance(cls.url_pattern, List):
+                    for pattern in cls.url_pattern:
+                        handlers.append((pattern, cls))
+                else:
+                    handlers.append((cls.url_pattern, cls))
         self.add_handlers(perfix, handlers)
 
     def _get_host_handlers(self, request):

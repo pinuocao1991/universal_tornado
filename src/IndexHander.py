@@ -4,12 +4,17 @@ from config.base import route
 from config.middleHandler import MiddleHandler
 
 
-@route('/')
+@route(['/(.*)','/'])
 class Main(MiddleHandler):
 
-    def get(self, **kwargs):
+    def get(self,view):
+        print('get',view)
         print(self.keys)
         raise HTTPError(500, "Query argument cannot be empty string")
+
+    def post(self,view):
+        print('post:',view)
+
 
 @route('/person')
 class Person(MiddleHandler):
