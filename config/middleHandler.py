@@ -9,6 +9,7 @@ middleware_list = [
 class MiddleHandler(RequestHandler):
 
     def initialize(self):
+        self.keys = self.request.arguments.keys()
         # 若子类内没有自定义，则使用settings内的默认配置
         try:
             self.middleware_list
