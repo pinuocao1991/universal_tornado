@@ -6,8 +6,9 @@ from config.middleHandler import MiddleHandler
 
 @route('/')
 class Main(MiddleHandler):
+
     def get(self, **kwargs):
-        ss = self.get_argument("id")
+        print(self.keys)
         raise HTTPError(500, "Query argument cannot be empty string")
 
 @route('/person')
