@@ -6,13 +6,12 @@ loggers:
 #    handlers: [console]
   tornado:
     level: DEBUG
-#    handlers: [console,log]
     handlers: [console]
     propagate: no
-  tornado.access:
-    level: DEBUG
-    handlers: [console]
-    propagate: no
+#  tornado.access:
+#    level: DEBUG
+#    handlers: [console]
+#    propagate: no
 
 #  log:
 #    level: DEBUG
@@ -31,6 +30,7 @@ handlers:
     level: DEBUG
     formatter: simple
     stream: ext://sys.stdout
+
   access:
     class: logging.handlers.TimedRotatingFileHandler
     level: DEBUG

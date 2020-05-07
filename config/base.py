@@ -14,11 +14,11 @@ def log_func(handler):
     else:
         log_method = access_log.error
     request_time = 1000.0 * handler.request.request_time()
-    log_method('''%d %s %s (%s) %s %s %.2fms''',
+    log_method('''%d %s %s (%s) 参数:%s %s 请求时间:%.2fms''',
                handler.get_status(), handler.request.method,
                handler.request.uri, handler.request.remote_ip,
-               handler.request.headers["User-Agent"],
                handler.request.arguments,
+               handler.request.headers["User-Agent"],
                request_time)
 
 settings = {
