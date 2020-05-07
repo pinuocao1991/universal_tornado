@@ -7,9 +7,8 @@ from config.middleHandler import MiddleHandler
 @route(['/view/','/'])
 class Main(MiddleHandler):
 
-    def get(self,view):
-        ss = 1/0
-        print('get',view)
+    def get(self):
+        # ss = 1/0
         print(self.keys)
         raise HTTPError(500, "Query argument cannot be empty string")
 
@@ -19,5 +18,5 @@ class Main(MiddleHandler):
 
 @route('/person')
 class Person(MiddleHandler):
-    def get(self, name):
-        self.write(name)
+    def get(self):
+        return "{'asd':1223}"

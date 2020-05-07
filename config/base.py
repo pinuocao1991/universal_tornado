@@ -26,9 +26,6 @@ settings = {
     "log_function": log_func,
 }
 
-
-
-
 class Application(tornado.web.Application):
     """
     Tornado 应用实例

@@ -1,4 +1,7 @@
 import importlib
+
+from tornado.web import HTTPError
+
 from config.base import RequestHandler
 
 #引入中间件，可以自定义过滤器。
@@ -32,8 +35,13 @@ class MiddleHandler(RequestHandler):
         super().finish(chunk)
 
     def write_error(self, status_code, **kwargs):
-        # 若捕获错误，则发送错误信息给client
-        exc_cls, exc_instance, trace = kwargs.get("exc_info")
-        if status_code != 200:
-            self.set_status(status_code)
-            self.write({"msg": str(exc_instance)})
+
+        # 获取send_error中的reason
+        reason = kwargs.get('reason', 'unknown')
+
+        # 获取HTTPError中的log_message作为reason
+        if 'exc_info' in kwargs:
+            exception = kwargs['exc_info'][1]
+            if isinstance(exception, HTTPError) and exception.log_message:
+                reason = exception.log_message
+        self.write({'status_code': status_code, 'reason': reason})
