@@ -1,13 +1,27 @@
 version: 1
+
 loggers:
+#  root:
+#    level: DEBUG
+#    handlers: [console]
+  tornado:
+    level: DEBUG
+#    handlers: [console,log]
+    handlers: [console]
+    propagate: no
   tornado.access:
     level: DEBUG
     handlers: [console]
     propagate: no
 
+#  log:
+#    level: DEBUG
+#    handlers: [console]
+#    propagate: no
+
 formatters:
   simple:
-    format: '[%(asctime)s - %(name)s - %(levelname)s] : %(message)s'
+    format: '[%(asctime)s %(name)s %(levelname)s] : %(message)s'
   timedRotating:
     format: '[%(asctime)s %(name)-12s %(levelname)-8s] : %(message)s'
 
@@ -16,7 +30,7 @@ handlers:
     class: logging.StreamHandler
     level: DEBUG
     formatter: simple
-#    stream: ext://sys.stdout
+    stream: ext://sys.stdout
   access:
     class: logging.handlers.TimedRotatingFileHandler
     level: DEBUG
