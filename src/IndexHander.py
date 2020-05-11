@@ -1,12 +1,13 @@
 from tornado.web import HTTPError
 
-from config.base import route
+from config.base import route, catch_exception
 from config.middleHandler import MiddleHandler
 
 
-@route(['/view/','/'])
+@route(['/'])
 class Main(MiddleHandler):
 
+    @catch_exception
     def get(self):
         # ss = 1/0
         print(self.keys)
@@ -19,4 +20,4 @@ class Main(MiddleHandler):
 @route('/person')
 class Person(MiddleHandler):
     def get(self):
-        return "{'asd':1223}"
+        self.write(str([1,2,'1243']))

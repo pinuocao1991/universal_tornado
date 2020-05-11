@@ -1,4 +1,5 @@
 import importlib
+import traceback
 
 from tornado.web import HTTPError
 
@@ -37,11 +38,19 @@ class MiddleHandler(RequestHandler):
     def write_error(self, status_code, **kwargs):
 
         # 获取send_error中的reason
-        reason = kwargs.get('reason', 'unknown')
+        reason = kwargs.get('reason', 'unkown')
 
         # 获取HTTPError中的log_message作为reason
         if 'exc_info' in kwargs:
             exception = kwargs['exc_info'][1]
             if isinstance(exception, HTTPError) and exception.log_message:
                 reason = exception.log_message
-        self.write({'status_code': status_code, 'reason': reason})
+                self.write({'status_code': status_code, 'reason': reason})
+            else:
+                self.write(str(status_code))
+                error_trace_list = traceback.format_exception(*kwargs.get("exc_info"))
+                self.set_header('Content-Type', 'text/plain')
+                for line in error_trace_list:
+                    self.write(line)
+                self.finish()
+

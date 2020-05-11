@@ -85,3 +85,11 @@ def route(url_pattern):
         return cls
     return handler_wapper
 
+def catch_exception(origin_func):
+    def wrapper(*args, **kwargs):
+        try:
+            u = origin_func(*args, **kwargs)
+            return u
+        except Exception:
+            return 'an Exception raised.'
+    return wrapper
