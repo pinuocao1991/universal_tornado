@@ -1,6 +1,8 @@
 # conding:utf-8
+from datetime import datetime, timezone
+from functools import wraps
 from typing import List
-
+from tornado.web import HTTPError
 import tornado.web
 from tornado.log import access_log
 
@@ -85,11 +87,62 @@ def route(url_pattern):
         return cls
     return handler_wapper
 
-def catch_exception(origin_func):
-    def wrapper(*args, **kwargs):
-        try:
-            u = origin_func(*args, **kwargs)
-            return u
-        except Exception:
-            return 'an Exception raised.'
-    return wrapper
+
+def params(strs=[], bools=[], ints=[], ids=[], floats=[], datetimes=[], required_params=[]):
+    def function(func):
+        @wraps(func)
+        def wrapper(self,*args):
+            request_params = self.request.arguments
+            for key in required_params:
+                if key not in request_params or request_params[key] is None:
+                    raise HTTPError(400,reason='参数' + key + '为必填项')
+            for key in strs:
+                if key in request_params:
+                    value = request_params[key]
+                    if isinstance(value, str):
+                        pass
+                    elif isinstance(value, bytes):
+                        required_params[key] = map(value,lambda x:x.decode('utf-8'))
+                    else:
+                        raise HTTPError(400, reason='参数' + key + '应为字符串类型')
+
+            for key in ints:
+                if key in request_params:
+                    try:
+                        request_params[key] = int(request_params[key])
+                    except:
+                        raise HTTPError(400, reason='参数' + key + '解析错误')
+
+            for key in bools:
+                if key in request_params:
+                    try:
+                        request_params[key] = request_params[key] == 'true'
+                    except:
+                        raise HTTPError(400, reason='参数' + key + '解析错误')
+
+            for key in ids:
+                if key in request_params:
+                    try:
+                        request_params[key] = str(request_params[key])
+                    except:
+                        raise HTTPError(
+                            400, 'not valid id field= ' + key + ' value= ' + request_params[key])
+
+            for key in datetimes:
+                if key in request_params:
+                    try:
+                        request_params[key] = datetime.fromtimestamp(
+                            float(request_params[key]), timezone.utc)
+                    except:
+                        raise HTTPError(400, reason='参数' + key + '解析错误')
+
+            for key in floats:
+                if key in request_params:
+                    try:
+                        request_params[key] = float(request_params[key])
+                    except:
+                        raise HTTPError(400, reason='参数' + key + '解析错误')
+            res = func(self, *args, **request_params)
+            return res
+        return wrapper
+    return function

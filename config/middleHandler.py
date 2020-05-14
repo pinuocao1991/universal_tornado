@@ -1,6 +1,9 @@
 import importlib
 import traceback
+from functools import wraps
 
+from tornado import escape
+from tornado.escape import utf8
 from tornado.web import HTTPError
 
 from config.base import RequestHandler
@@ -35,22 +38,24 @@ class MiddleHandler(RequestHandler):
     def finish(self, chunk=None):
         super().finish(chunk)
 
-    def write_error(self, status_code, **kwargs):
+    # def write_error(self, status_code, **kwargs):
+    #
+    #     # 获取send_error中的reason
+    #     reason = kwargs.get('reason', 'unkown')
+    #
+    #     # 获取HTTPError中的log_message作为reason
+    #     if 'exc_info' in kwargs:
+    #         exception = kwargs['exc_info'][1]
+    #         if isinstance(exception, HTTPError) and exception.log_message:
+    #             reason = exception.log_message
+    #             reason = {'status_code': status_code, 'reason': reason}
+    #             self.write(reason)
+    #         else:
+    #             self.write(str(status_code))
+    #             error_trace_list = traceback.format_exception(*kwargs.get("exc_info"))
+    #             self.set_header('Content-Type', 'text/plain')
+    #             for line in error_trace_list:
+    #                 self.write(line)
+    #             self.finish()
 
-        # 获取send_error中的reason
-        reason = kwargs.get('reason', 'unkown')
-
-        # 获取HTTPError中的log_message作为reason
-        if 'exc_info' in kwargs:
-            exception = kwargs['exc_info'][1]
-            if isinstance(exception, HTTPError) and exception.log_message:
-                reason = exception.log_message
-                self.write({'status_code': status_code, 'reason': reason})
-            else:
-                self.write(str(status_code))
-                error_trace_list = traceback.format_exception(*kwargs.get("exc_info"))
-                self.set_header('Content-Type', 'text/plain')
-                for line in error_trace_list:
-                    self.write(line)
-                self.finish()
 

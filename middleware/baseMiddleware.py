@@ -1,4 +1,4 @@
-
+# coding:utf-8
 class Middleware(object):
     '''
     中间件基类

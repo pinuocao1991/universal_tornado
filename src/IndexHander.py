@@ -1,17 +1,18 @@
 from tornado.web import HTTPError
-
-from config.base import route, catch_exception
+from config.base import route, params
 from config.middleHandler import MiddleHandler
 
 
 @route(['/'])
-class Main(MiddleHandler):
+class IndexHander(MiddleHandler):
 
-    @catch_exception
-    def get(self):
-        # ss = 1/0
-        print(self.keys)
-        raise HTTPError(500, "Query argument cannot be empty string")
+    @params(
+        strs=["aaa",'id'],
+        required_params=["id"]
+    )
+    def get(self,*args,**kwargs):
+        print(kwargs)
+        raise HTTPError(500, reason="你好")
 
     def post(self,view):
         print('post:',view)

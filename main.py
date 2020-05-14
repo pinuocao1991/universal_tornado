@@ -1,4 +1,3 @@
-# coding:utf-8
 import logging.config
 import tornado.ioloop
 import yaml
