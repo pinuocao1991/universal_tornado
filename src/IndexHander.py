@@ -7,12 +7,13 @@ from config.middleHandler import MiddleHandler
 class IndexHander(MiddleHandler):
 
     @params(
-        strs=["aaa",'id'],
+        strs=["view",'id'],
         ints=['ss'],
         required_params=["id"]
     )
-    def get(self,*args,**kwargs):
+    def get(self,view,**kwargs):
         print(kwargs)
+        print(view)
         raise HTTPError(500, reason="你好")
 
     def post(self,view):
