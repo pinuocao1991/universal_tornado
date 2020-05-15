@@ -98,50 +98,56 @@ def params(strs=[], bools=[], ints=[], ids=[], floats=[], datetimes=[], required
                     raise HTTPError(400,reason='参数' + key + '为必填项')
             for key in strs:
                 if key in request_params:
-                    value = request_params[key]
-                    if isinstance(value, str):
-                        pass
-                    elif isinstance(value, bytes):
-                        required_params[key] = map(value,lambda x:x.decode('utf-8'))
-                    else:
-                        raise HTTPError(400, reason='参数' + key + '应为字符串类型')
-
+                    values = request_params[key]
+                    try:
+                        request_params[key] = [v.decode('utf-8') for v in values]
+                    except:
+                        raise HTTPError(400, reason='参数' + key + '解析错误')
             for key in ints:
+                values = request_params[key]
                 if key in request_params:
                     try:
-                        request_params[key] = int(request_params[key])
+                        request_params[key] = [int(v) for v in values]
                     except:
                         raise HTTPError(400, reason='参数' + key + '解析错误')
 
             for key in bools:
+                values = request_params[key]
                 if key in request_params:
                     try:
-                        request_params[key] = request_params[key] == 'true'
+                        request_params[key] = [v.decode('utf-8') == 'true' for v in values]
                     except:
                         raise HTTPError(400, reason='参数' + key + '解析错误')
 
             for key in ids:
+                values = request_params[key]
                 if key in request_params:
                     try:
-                        request_params[key] = str(request_params[key])
+                        request_params[key] = [v.decode('utf-8') for v in values]
                     except:
                         raise HTTPError(
                             400, 'not valid id field= ' + key + ' value= ' + request_params[key])
 
             for key in datetimes:
                 if key in request_params:
+                    values = request_params[key]
+                    values = [v.decode('utf-8') for v in values]
                     try:
-                        request_params[key] = datetime.fromtimestamp(
-                            float(request_params[key]), timezone.utc)
+                        request_params[key] = [datetime.fromtimestamp(float(v), timezone.utc) for v in  values]
                     except:
                         raise HTTPError(400, reason='参数' + key + '解析错误')
 
             for key in floats:
                 if key in request_params:
+                    values = request_params[key]
+                    values = [v.decode('utf-8') for v in values]
                     try:
-                        request_params[key] = float(request_params[key])
+                        request_params[key] = [float(v) for v in values]
                     except:
                         raise HTTPError(400, reason='参数' + key + '解析错误')
+            for key in request_params:
+                if len(request_params[key]) == 1:
+                    request_params[key] = request_params[key][0]
             res = func(self, *args, **request_params)
             return res
         return wrapper

@@ -8,6 +8,7 @@ class IndexHander(MiddleHandler):
 
     @params(
         strs=["aaa",'id'],
+        ints=['ss'],
         required_params=["id"]
     )
     def get(self,*args,**kwargs):
