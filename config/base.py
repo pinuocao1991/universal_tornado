@@ -36,6 +36,7 @@ class Application(tornado.web.Application):
     def load_handler_module(self, handler_module, perfix=".*$"):
         """
         从模块加载 RequestHandler
+
             `handler_module` : 模块
             `perfix` : url 前缀
         """
@@ -45,9 +46,7 @@ class Application(tornado.web.Application):
         # 判断是否拥有 url 规则
         has_pattern = lambda cls: hasattr(cls, 'url_pattern') and cls.url_pattern
         handlers = []
-
         # 迭代模块成员
-
         for i in dir(handler_module):
             cls = getattr(handler_module, i)
             if is_handler(cls) and has_pattern(cls):

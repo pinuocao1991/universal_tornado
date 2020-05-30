@@ -9,6 +9,7 @@ with open("log.yaml", "r") as f_conf:
     logging.config.dictConfig(dict_conf)
 
 application = base.Application(**base.settings)
+print(dir(src))
 application.load_handler_module(src)
 application.listen(8000)
 tornado.ioloop.IOLoop.instance().start()

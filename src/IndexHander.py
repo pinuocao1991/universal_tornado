@@ -7,20 +7,20 @@ from config.middleHandler import MiddleHandler
 class IndexHander(MiddleHandler):
 
     @params(
-        strs=["view",'id'],
+        strs=["view", 'id'],
         ints=['ss'],
         required_params=["id"]
     )
-    def get(self,view,**kwargs):
+    def get(self, view, **kwargs):
         print(kwargs)
         print(view)
         raise HTTPError(500, reason="你好")
 
-    def post(self,view):
-        print('post:',view)
+    def post(self, view: str, ss: int):
+        print('post:', view)
 
 
 @route('/person')
 class Person(MiddleHandler):
     def get(self):
-        self.write(str([1,2,'1243']))
+        self.write(str([1, 2, '1243']))
